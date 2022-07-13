@@ -31,7 +31,8 @@ class MovieController extends Controller
     {
         try{
             $movie = Movie::create($request->all());
-
+            $movie->actors()->sync($request->actors);
+            $movie->genres()->sync($request->genres);
             return response()->json($movie, 201);
 
         } catch (\Exception $exception){
@@ -48,7 +49,7 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         try {
-            return response()->json($movie, 200);
+            return response()->json($movie->load(['genres','actors']),200);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }
@@ -65,7 +66,9 @@ class MovieController extends Controller
     {
         try {
             $movie->update($request->all());
-            return response()->json($movie, 200);
+            $movie->actors()->sync($request->actors);
+            $movie->genres()->sync($request->genres);
+            return response()->json($movie->load(['genres','actors']),201);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }

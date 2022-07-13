@@ -15,7 +15,7 @@ class ActorController extends Controller
     public function index()
     {
         try{
-            return response()->json(Actor::all(), 200);
+            return response()->json(Actor::with(['movies'])->get(), 200);
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);
         }
@@ -32,7 +32,7 @@ class ActorController extends Controller
         try{
             $actor = Actor::create($request->all());
 
-            return response()->json($actor, 201);
+            return response()->json($actor->load(['movies']),201);
 
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);
@@ -48,7 +48,7 @@ class ActorController extends Controller
     public function show(Actor $actor)
     {
         try {
-            return response()->json($actor, 200);
+            return response()->json($actor->load(['movies']),200);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }

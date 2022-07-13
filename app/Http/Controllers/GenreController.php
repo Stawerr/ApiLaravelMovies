@@ -16,7 +16,7 @@ class GenreController extends Controller
     public function index()
     {
         try{
-            return response()->json(Genre::all(), 200);
+            return response()->json(Genre::with(['movies'])->get(), 200);
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);
         }
@@ -34,7 +34,7 @@ class GenreController extends Controller
         try{
             $genre = Genre::create($request->all());
 
-            return response()->json($genre, 201);
+            return response()->json($genre->load(['movies']),201);
 
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);
@@ -50,7 +50,7 @@ class GenreController extends Controller
     public function show(Genre $genre)
     {
         try {
-            return response()->json($genre, 200);
+            return response()->json($genre->load(['movies']),200);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }
