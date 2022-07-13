@@ -34,7 +34,7 @@ class GenreController extends Controller
         try{
             $genre = Genre::create($request->all());
 
-            return response()->json($genre->load(['movies']),201);
+            return response()->json($genre, 201);
 
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);

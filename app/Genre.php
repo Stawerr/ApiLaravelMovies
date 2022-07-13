@@ -15,4 +15,12 @@ class Genre extends Model
     public function movies(){
         return $this->belongsToMany(Movie::class);
     }
+    protected static function booted()
+    {
+        static::deleting(function ($genre) {
+            if ($genre->movies()->exists()) {
+                throw new \Exception('Related movies found');
+            }
+        });
+    }
 }

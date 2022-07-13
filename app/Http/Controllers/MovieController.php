@@ -33,7 +33,7 @@ class MovieController extends Controller
             $movie = Movie::create($request->all());
             $movie->actors()->sync($request->actors);
             $movie->genres()->sync($request->genres);
-            return response()->json($movie, 201);
+            return response()->json($movie->load(['genres','actors']), 201);
 
         } catch (\Exception $exception){
             return response()->json(['error'=>$exception],500);
